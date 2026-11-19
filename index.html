@@ -142,6 +142,8 @@ textarea{min-height:96px;resize:vertical}
 .submit{width:100%;margin-top:22px;background:var(--red);color:#fff;font-weight:700;padding:15px;border-radius:10px;font-size:16px}
 .submit:hover{background:var(--red-d)}
 .submit:disabled{opacity:.6;cursor:wait}
+.senderr{margin-top:18px;padding:12px 14px;border-radius:9px;background:#fff1f1;border:1px solid #f3c2c4;color:#a10f17;font-size:14px;line-height:1.5}
+.senderr a{font-weight:700;text-decoration:underline}
 .done{text-align:center;padding:20px 0}
 .done .ok{width:72px;height:72px;border-radius:50%;background:var(--soft);display:grid;place-items:center;margin:0 auto 16px}
 .done p{color:var(--muted);line-height:1.6;margin:8px 0}
@@ -311,6 +313,7 @@ textarea{min-height:96px;resize:vertical}
         <label for="f-msg" data-t="f_msg">Describe the problem</label>
         <textarea id="f-msg" name="message" placeholder="What's going on? Any details help." data-tp="p_msg"></textarea>
         <label class="chk"><input type="checkbox" id="f-urgent" name="urgent"> <span data-t="urgent">This is urgent</span></label>
+        <div id="senderr" class="senderr" hidden><span data-t="send_err">Sorry, we couldn't send your request. Please try again, or call us at</span> <a href="tel:+16728331298" data-call class="phone-txt">(672) 833-1298</a></div>
         <button type="submit" class="submit" data-t="send">Send Request</button>
       </form>
     </div>
@@ -318,7 +321,6 @@ textarea{min-height:96px;resize:vertical}
       <div class="ok"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d7141f" stroke-width="2.6" stroke-linecap="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
       <h3><span data-t="thanks">Thanks,</span> <span id="d-name"></span><span data-t="thanks2">!</span></h3>
       <p id="d-sent"><span data-t="sent">Your request has been sent. We'll get back to you shortly.</span><br><span data-t="ref">Reference</span>: <span class="ref" id="d-ref"></span></p>
-      <p id="d-fb" hidden><span data-t="fb1">We couldn't send it automatically, so your email app has been opened with your request filled in &mdash; just press <b>Send</b>.</span><br><span data-t="fb2">Email app didn't open?</span> <a id="d-mail" href="#" style="color:#d7141f;font-weight:700" data-t="tap_here">Tap here</a> <span data-t="or_email">or email</span> <b>eoals0809@gmail.com</b></p>
       <p><span data-t="to_book">To book or confirm, call</span> <a href="tel:+16728331298" data-call style="color:#d7141f;font-weight:700" class="phone-txt">(672) 833-1298</a></p>
       <button class="submit" id="dclose" data-t="done">Done</button>
     </div>
@@ -366,6 +368,7 @@ textarea{min-height:96px;resize:vertical}
     thanks:["Thanks,","감사합니다,"], thanks2:["!","님!"],
     sent:["Your request has been sent. We'll get back to you shortly.","요청이 접수되었습니다. 곧 연락드릴게요."],
     ref:["Reference","접수번호"],
+    send_err:["Sorry, we couldn't send your request. Please try again, or call us at","죄송합니다, 요청을 보내지 못했어요. 다시 시도하시거나 전화 주세요:"],
     fb1:["We couldn't send it automatically, so your email app has been opened with your request filled in &mdash; just press <b>Send</b>.","자동 전송에 실패해서 내용이 채워진 메일 앱을 열었어요. <b>보내기</b>만 눌러주세요."],
     fb2:["Email app didn't open?","메일 앱이 안 열렸나요?"], tap_here:["Tap here","여기를 누르거나"], or_email:["or email","이메일:"],
     to_book:["To book or confirm, call","예약·확인 전화:"], done:["Done","닫기"],
@@ -498,13 +501,13 @@ textarea{min-height:96px;resize:vertical}
     btn.disabled = false; btn.textContent = T("send");
 
     if(!sent){
-      const body = Object.entries(data).map(([k,v]) => k+": "+v).join("\n");
-      const mail = "mailto:"+EMAIL+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
-      $("#d-mail").href = mail;
-      try{ window.location.href = mail; }catch(err){}
+      // keep what they typed, show an error with retry + phone
+      $("#senderr").hidden = false;
+      $("#senderr").scrollIntoView({block:"nearest"});
+      return;
     }
+    $("#senderr").hidden = true;
     try{ localStorage.removeItem("damonDraft"); }catch(err){}
-    $("#d-sent").hidden = !sent; $("#d-fb").hidden = sent;
     $("#d-name").textContent = data.Name.split(" ")[0];
     $("#d-ref").textContent = ref;
     $("#formwrap").hidden=true; $("#donewrap").hidden=false;
