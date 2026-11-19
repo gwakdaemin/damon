@@ -148,7 +148,7 @@ textarea{min-height:96px;resize:vertical}
 .done .ok{width:72px;height:72px;border-radius:50%;background:var(--soft);display:grid;place-items:center;margin:0 auto 16px}
 .done p{color:var(--muted);line-height:1.6;margin:8px 0}
 .ref{font-family:ui-monospace,monospace;background:#f4f4f4;padding:4px 10px;border-radius:6px;color:#111}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;transition:.25s;z-index:200;pointer-events:none;text-align:center;max-width:90vw}
+.toast{position:fixed;left:50%;bottom:90px;font-weight:600;line-height:1.4;width:max-content;transform:translateX(-50%) translateY(20px);background:#111;color:#fff;padding:12px 18px;border-radius:10px;font-size:14px;opacity:0;transition:.25s;z-index:200;pointer-events:none;text-align:center;max-width:90vw}
 .toast.show{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
@@ -313,7 +313,7 @@ textarea{min-height:96px;resize:vertical}
         <label for="f-msg" data-t="f_msg">Describe the problem</label>
         <textarea id="f-msg" name="message" placeholder="What's going on? Any details help." data-tp="p_msg"></textarea>
         <label class="chk"><input type="checkbox" id="f-urgent" name="urgent"> <span data-t="urgent">This is urgent</span></label>
-        <div id="senderr" class="senderr" hidden><span data-t="send_err">Sorry, we couldn't send your request. Please try again, or call us at</span> <a href="tel:+16728331298" data-call class="phone-txt">(672) 833-1298</a></div>
+        <div id="senderr" class="senderr" hidden><span data-t="send_err">Sorry, we couldn't send your request. Please try again, or call us at</span> <a href="tel:+16728331298" data-call class="phone-txt">(672) 833-1298</a><small id="errwhy" style="display:block;margin-top:6px;color:#8a8a8a;font-size:12px"></small></div>
         <button type="submit" class="submit" data-t="send">Send Request</button>
       </form>
     </div>
@@ -368,6 +368,7 @@ textarea{min-height:96px;resize:vertical}
     thanks:["Thanks,","감사합니다,"], thanks2:["!","님!"],
     sent:["Your request has been sent. We'll get back to you shortly.","요청이 접수되었습니다. 곧 연락드릴게요."],
     ref:["Reference","접수번호"],
+    sent_toast:["Request sent! We'll contact you shortly.","견적 요청이 접수되었어요! 곧 연락드릴게요."],
     send_err:["Sorry, we couldn't send your request. Please try again, or call us at","죄송합니다, 요청을 보내지 못했어요. 다시 시도하시거나 전화 주세요:"],
     fb1:["We couldn't send it automatically, so your email app has been opened with your request filled in &mdash; just press <b>Send</b>.","자동 전송에 실패해서 내용이 채워진 메일 앱을 열었어요. <b>보내기</b>만 눌러주세요."],
     fb2:["Email app didn't open?","메일 앱이 안 열렸나요?"], tap_here:["Tap here","여기를 누르거나"], or_email:["or email","이메일:"],
@@ -403,7 +404,7 @@ textarea{min-height:96px;resize:vertical}
   document.addEventListener("click", e => { if(!drawer.contains(e.target) && !burger.contains(e.target)) setMenu(false); });
 
   // Toast
-  let tt; function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),2600); }
+  let tt; function toast(m,ms){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove("show"),ms||2600); }
 
   // Call links: try tel:, also show number (tel: may be blocked in some viewers)
   $$("[data-call]").forEach(a => a.addEventListener("click", () => {
@@ -483,7 +484,7 @@ textarea{min-height:96px;resize:vertical}
 
     const btn = form.querySelector(".submit");
     btn.disabled = true; btn.textContent = T("sending");
-    let sent = false;
+    let sent = false, why = "";
     try{
       const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 15000);
       const res = await fetch("https://formsubmit.co/ajax/"+EMAIL, {
@@ -497,21 +498,22 @@ textarea{min-height:96px;resize:vertical}
       clearTimeout(to);
       const j = await res.json().catch(()=>({}));
       sent = res.ok && String(j.success) === "true";
-    }catch(err){ sent = false; }
+      if(!sent) why = "HTTP " + res.status + (j.message ? " – " + j.message : "");
+    }catch(err){ sent = false; why = (err && err.name === "AbortError") ? "Timeout" : "Network blocked (" + location.hostname + ")"; }
     btn.disabled = false; btn.textContent = T("send");
 
     if(!sent){
       // keep what they typed, show an error with retry + phone
       $("#senderr").hidden = false;
+      $("#errwhy").textContent = why;
       $("#senderr").scrollIntoView({block:"nearest"});
       return;
     }
     $("#senderr").hidden = true;
     try{ localStorage.removeItem("damonDraft"); }catch(err){}
-    $("#d-name").textContent = data.Name.split(" ")[0];
-    $("#d-ref").textContent = ref;
-    $("#formwrap").hidden=true; $("#donewrap").hidden=false;
     form.reset(); $$(".err").forEach(x=>mark(x,false));
+    closeQuote();
+    toast("✓ " + T("sent_toast"), 4500);
   });
   form.addEventListener("input", e => { if(e.target.classList.contains("err")) mark(e.target,false); });
 
