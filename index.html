@@ -6,25 +6,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Damon Plumbing – Vancouver Plumbing Services</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#d7141f;--red-d:#b00f18;--ink:#111;--muted:#6b6b6b;--soft:#fdeeee;--line:#e8e8e8}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 html{color-scheme:light}
-body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+body{font-family:Inter,'Noto Sans KR',system-ui,sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
 
 /* Header */
 header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line)}
-.hbar{display:flex;align-items:center;justify-content:space-between;height:72px;gap:14px}
+.hbar{display:flex;align-items:center;justify-content:space-between;height:72px;gap:10px}
+.lang{font-weight:700;font-size:13px;padding:8px 10px;border:1.5px solid #d9d9d9;border-radius:8px;white-space:nowrap;color:#333}
+.lang:hover{border-color:var(--red);color:var(--red)}
+html[lang=ko] .eyebrow,html[lang=ko] .kicker,html[lang=ko] .area .sub{letter-spacing:2px}
+html[lang=ko] .area h2,html[lang=ko] .cta .t{font-family:'Noto Sans KR',sans-serif}
 .logo{display:inline-flex;flex-direction:column;align-items:center;line-height:1;color:var(--red)}
 .logo b{font-family:Montserrat,sans-serif;font-weight:900;font-size:30px;letter-spacing:-.5px}
 .logo span{font-family:Montserrat,sans-serif;font-weight:800;font-size:10px;letter-spacing:7px;margin-top:3px;padding-left:7px;text-align:center}
-.hright{display:flex;align-items:center;gap:14px}
-.btn-q{background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:11px 16px;border-radius:8px;display:inline-flex;align-items:center;gap:8px;transition:.15s}
+.hright{display:flex;align-items:center;gap:8px}
+.btn-q{background:var(--red);color:#fff;font-weight:700;font-size:14px;padding:11px 13px;white-space:nowrap;border-radius:8px;display:inline-flex;align-items:center;gap:8px;transition:.15s}
 .btn-q:hover{background:var(--red-d)}
 .burger{width:40px;height:40px;display:grid;place-items:center}
 .burger i,.burger i:before,.burger i:after{display:block;width:26px;height:3px;background:var(--ink);border-radius:2px;position:relative;transition:.25s}
@@ -39,6 +43,7 @@ nav.desk a:hover{color:var(--red)}
 .drawer.open{transform:none;opacity:1;pointer-events:auto}
 .drawer a{display:block;padding:16px 22px;font-weight:600;border-top:1px solid var(--line)}
 .drawer a:hover{color:var(--red)}
+@media(max-width:370px){.btn-q svg{display:none}.logo b{font-size:26px}}
 @media(min-width:900px){nav.desk{display:flex}.burger{display:none}.drawer{display:none}}
 
 /* Hero */
@@ -96,7 +101,8 @@ h2{font-size:clamp(28px,6.5vw,40px);font-weight:700;letter-spacing:-.8px;margin:
 
 /* Footer */
 footer{background:#111;color:#cfcfcf;padding:44px 0 90px;font-size:14px;line-height:1.7}
-footer .logo{color:#fff;margin-bottom:14px}
+footer .logo{color:#fff;margin-bottom:14px;display:flex;width:fit-content}
+html[lang=ko] body{word-break:keep-all}
 footer a{color:#fff;font-weight:600}
 .fgrid{display:grid;gap:24px}
 @media(min-width:700px){.fgrid{grid-template-columns:2fr 1fr 1fr}footer{padding-bottom:44px}}
@@ -150,12 +156,13 @@ textarea{min-height:96px;resize:vertical}
   <div class="wrap hbar">
     <a href="#top" class="logo" aria-label="Damon Plumbing home"><b>DAMON</b><span>PLUMBING</span></a>
     <nav class="desk">
-      <a href="#services">Services</a>
-      <a href="#area">Service Area</a>
-      <a href="#contact">Contact</a>
+      <a href="#services" data-t="nav_services">Services</a>
+      <a href="#area" data-t="nav_area">Service Area</a>
+      <a href="#contact" data-t="nav_contact">Contact</a>
     </nav>
     <div class="hright">
-      <button class="btn-q" data-quote>GET A QUOTE
+      <button class="lang" id="langBtn" type="button">한글</button>
+      <button class="btn-q" data-quote><span data-t="get_quote">GET A QUOTE</span>
         <svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#fff" stroke-width="2.4"><path d="M2 2l6 6-6 6"/></svg>
       </button>
       <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><i></i></button>
@@ -163,28 +170,28 @@ textarea{min-height:96px;resize:vertical}
   </div>
 </header>
 <div class="drawer" id="drawer">
-  <a href="#services">Services</a>
-  <a href="#area">Service Area</a>
-  <a href="#contact">Contact</a>
-  <a href="#" data-quote>Request a Quote</a>
+  <a href="#services" data-t="nav_services">Services</a>
+  <a href="#area" data-t="nav_area">Service Area</a>
+  <a href="#contact" data-t="nav_contact">Contact</a>
+  <a href="#" data-quote data-t="req_quote">Request a Quote</a>
 </div>
 
 <div class="hero" id="top">
   <div class="photo"></div>
   <div class="wrap">
-    <div class="eyebrow">Vancouver Plumbing Services</div>
+    <div class="eyebrow" data-t="eyebrow">Vancouver Plumbing Services</div>
     <h1><span class="a">DAMON</span><span class="b">PLUMBING</span></h1>
     <div class="rule"></div>
-    <p>Reliable plumbing solutions for your home and business in Vancouver.</p>
+    <p data-t="hero_p">Reliable plumbing solutions for your home and business in Vancouver.</p>
     <div class="ctas">
       <a class="cta call" href="tel:+16728331298" data-call>
         <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg>
-        <div><div class="t">CALL NOW</div><div class="s">Tap to call · <span class="phone-txt">(672) 833-1298</span></div></div>
+        <div><div class="t" data-t="call_now">CALL NOW</div><div class="s"><span data-t="tap_call">Tap to call</span> · <span class="phone-txt">(672) 833-1298</span></div></div>
         <svg class="chev" width="12" height="20" viewBox="0 0 10 16" fill="none" stroke="#fff" stroke-width="2.2"><path d="M2 2l6 6-6 6"/></svg>
       </a>
       <button class="cta quote" data-quote style="text-align:left">
         <svg width="40" height="44" viewBox="0 0 24 26" fill="none" stroke="#d7141f" stroke-width="1.8" stroke-linejoin="round"><path d="M4 2h11l5 5v17H4z"/><path d="M15 2v5h5M8 11h5M8 15h8M8 19h8"/></svg>
-        <div><div class="t">REQUEST A QUOTE</div><div class="s">Get a free estimate</div></div>
+        <div><div class="t" data-t="req_quote_up">REQUEST A QUOTE</div><div class="s" data-t="free_est">Get a free estimate</div></div>
         <svg class="chev" width="12" height="20" viewBox="0 0 10 16" fill="none" stroke="#d7141f" stroke-width="2.2"><path d="M2 2l6 6-6 6"/></svg>
       </button>
     </div>
@@ -193,20 +200,20 @@ textarea{min-height:96px;resize:vertical}
 
 <section id="services">
   <div class="wrap">
-    <div class="kicker">Our Services</div>
-    <h2>Essential Plumbing Services</h2>
+    <div class="kicker" data-t="our_services">Our Services</div>
+    <h2 data-t="ess_services">Essential Plumbing Services</h2>
     <div class="services">
       <button class="svc" data-svc="repairs">
         <div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d7141f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 005.3 5.3L21 13l-2 0M14.7 6.3L13 3l0 2M14.7 6.3a4 4 0 015.3-.9M14.7 6.3L4 17a2.1 2.1 0 003 3l10.7-10.7"/></svg></div>
-        <h3>Repairs</h3><p>Leaks, clogs, and plumbing issues</p>
+        <h3 data-t="s1">Repairs</h3><p data-t="s1d">Leaks, clogs, and plumbing issues</p>
       </button>
       <button class="svc" data-svc="drain">
         <div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d7141f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v9a5 5 0 0010 0v-1a2 2 0 014 0v1M9 3v9a1 1 0 002 0V3M4 3h6M17 12h4"/></svg></div>
-        <h3>Drain &amp; Sewer</h3><p>Drain cleaning and maintenance</p>
+        <h3 data-t="s2">Drain &amp; Sewer</h3><p data-t="s2d">Drain cleaning and maintenance</p>
       </button>
       <button class="svc" data-svc="fixture">
         <div class="ic"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d7141f" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6M12 4v3M4 10h12a3 3 0 013 3v1h2v-3M4 10v4h9M8 18c0 1.2-.9 2-2 2s-2-.8-2-2c0-1.3 2-3.5 2-3.5s2 2.2 2 3.5z"/></svg></div>
-        <h3>Fixture Installation</h3><p>Faucets, sinks, toilets, and more</p>
+        <h3 data-t="s3">Fixture Installation</h3><p data-t="s3d">Faucets, sinks, toilets, and more</p>
       </button>
     </div>
     <div class="detail" id="detail"></div>
@@ -229,16 +236,16 @@ textarea{min-height:96px;resize:vertical}
   </svg>
   <div class="wrap">
     <div>
-      <div class="kicker">Proudly Serving</div>
-      <h2>VANCOUVER</h2>
-      <div class="sub">AND SURROUNDING AREAS</div>
+      <div class="kicker" data-t="proudly">Proudly Serving</div>
+      <h2 data-t="vancouver">VANCOUVER</h2>
+      <div class="sub" data-t="surrounding">AND SURROUNDING AREAS</div>
     </div>
     <div class="pill">
       <svg width="28" height="34" viewBox="0 0 24 30" fill="#fff"><path d="M12 0a9 9 0 00-9 9c0 6.8 9 17 9 17s9-10.2 9-17a9 9 0 00-9-9zm0 12.5A3.5 3.5 0 1112 5.5a3.5 3.5 0 010 7z"/><ellipse cx="12" cy="28" rx="5" ry="1.4" opacity=".6"/></svg>
-      <div>Local Plumber<br>in Vancouver</div>
+      <div data-t="local">Local Plumber<br>in Vancouver</div>
     </div>
     <div class="towns">
-      <span>Vancouver</span><span>Burnaby</span><span>Richmond</span><span>North Vancouver</span><span>West Vancouver</span><span>New Westminster</span><span>Coquitlam</span><span>Surrey</span>
+      <span data-t="town0">Vancouver</span><span data-t="town1">Burnaby</span><span data-t="town2">Richmond</span><span data-t="town3">North Vancouver</span><span data-t="town4">West Vancouver</span><span data-t="town5">New Westminster</span><span data-t="town6">Coquitlam</span><span data-t="town7">Surrey</span>
     </div>
   </div>
 </div>
@@ -247,73 +254,73 @@ textarea{min-height:96px;resize:vertical}
   <div class="wrap fgrid">
     <div>
       <div class="logo"><b>DAMON</b><span>PLUMBING</span></div>
-      Reliable plumbing solutions for your home and business in Vancouver, BC.
+      <span data-t="foot_p">Reliable plumbing solutions for your home and business in Vancouver, BC.</span>
     </div>
     <div>
-      <div style="color:#fff;font-weight:700;margin-bottom:6px">Contact</div>
-      Phone: <a href="tel:+16728331298" data-call class="phone-txt">(672) 833-1298</a><br>
-      Email: <a href="mailto:eoals0809@gmail.com">eoals0809@gmail.com</a><br>
-      <a href="#" data-quote>Request a free quote →</a>
+      <div style="color:#fff;font-weight:700;margin-bottom:6px" data-t="nav_contact">Contact</div>
+      <span data-t="phone_l">Phone</span>: <a href="tel:+16728331298" data-call class="phone-txt">(672) 833-1298</a><br>
+      <span data-t="email_l">Email</span>: <a href="mailto:eoals0809@gmail.com">eoals0809@gmail.com</a><br>
+      <a href="#" data-quote data-t="free_quote_arrow">Request a free quote →</a>
     </div>
     <div>
-      <div style="color:#fff;font-weight:700;margin-bottom:6px">Hours</div>
-      Mon–Fri: 7:00am – 7:00pm<br>Sat: 8:00am – 4:00pm<br>Sun: Emergency calls only
+      <div style="color:#fff;font-weight:700;margin-bottom:6px" data-t="hours">Hours</div>
+      <span data-t="hours_d">Mon–Fri: 7:00am – 7:00pm<br>Sat: 8:00am – 4:00pm<br>Sun: Emergency calls only</span>
     </div>
   </div>
-  <div class="wrap" style="margin-top:28px;font-size:12px;opacity:.6">© <span id="yr"></span> Damon Plumbing. All rights reserved.</div>
+  <div class="wrap" style="margin-top:28px;font-size:12px;opacity:.6">© <span id="yr"></span> Damon Plumbing. <span data-t="rights">All rights reserved.</span></div>
 </footer>
 
 <div class="mbar">
-  <a href="tel:+16728331298" data-call>📞 Call Now</a>
-  <button data-quote>Free Quote</button>
+  <a href="tel:+16728331298" data-call>📞 <span data-t="call_now_s">Call Now</span></a>
+  <button data-quote data-t="free_quote">Free Quote</button>
 </div>
 
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
   <div class="sheet">
-    <div class="top"><h3 id="mtitle">Request a Free Quote</h3><button class="x" id="mclose" aria-label="Close">×</button></div>
+    <div class="top"><h3 id="mtitle" data-t="m_title">Request a Free Quote</h3><button class="x" id="mclose" aria-label="Close">×</button></div>
     <div id="formwrap">
-      <p class="lead">Tell us about the job and we'll get back to you with an estimate.</p>
+      <p class="lead" data-t="m_lead">Tell us about the job and we'll get back to you with an estimate.</p>
       <form id="qform" novalidate>
         <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
-        <label for="f-name">Full name *</label>
+        <label for="f-name" data-t="f_name">Full name *</label>
         <input id="f-name" name="name" autocomplete="name">
-        <div class="emsg">Please enter your name.</div>
+        <div class="emsg" data-t="e_name">Please enter your name.</div>
         <div class="row">
           <div>
-            <label for="f-phone">Phone *</label>
-            <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="e.g. 604-123-4567">
-            <div class="emsg">Enter a valid phone number.</div>
+            <label for="f-phone" data-t="f_phone">Phone *</label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="e.g. 604-123-4567" data-tp="p_phone">
+            <div class="emsg" data-t="e_phone">Enter a valid phone number.</div>
           </div>
           <div>
-            <label for="f-email">Email</label>
+            <label for="f-email" data-t="email_l">Email</label>
             <input id="f-email" name="email" type="email" autocomplete="email">
-            <div class="emsg">Enter a valid email.</div>
+            <div class="emsg" data-t="e_email">Enter a valid email.</div>
           </div>
         </div>
-        <label for="f-svc">Service needed *</label>
+        <label for="f-svc" data-t="f_svc">Service needed *</label>
         <select id="f-svc" name="service">
-          <option value="">Select a service…</option>
-          <option value="repairs">Repairs – leaks, clogs, issues</option>
-          <option value="drain">Drain &amp; Sewer</option>
-          <option value="fixture">Fixture Installation</option>
-          <option value="other">Other</option>
+          <option value="" data-t="o0">Select a service…</option>
+          <option value="repairs" data-t="o1">Repairs – leaks, clogs, issues</option>
+          <option value="drain" data-t="s2">Drain &amp; Sewer</option>
+          <option value="fixture" data-t="s3">Fixture Installation</option>
+          <option value="other" data-t="o4">Other</option>
         </select>
-        <div class="emsg">Please choose a service.</div>
-        <label for="f-addr">Address / Area</label>
-        <input id="f-addr" name="address" placeholder="e.g. Kitsilano, Vancouver">
-        <label for="f-msg">Describe the problem</label>
-        <textarea id="f-msg" name="message" placeholder="What's going on? Any details help."></textarea>
-        <label class="chk"><input type="checkbox" id="f-urgent" name="urgent"> This is urgent</label>
-        <button type="submit" class="submit">Send Request</button>
+        <div class="emsg" data-t="e_svc">Please choose a service.</div>
+        <label for="f-addr" data-t="f_addr">Address / Area</label>
+        <input id="f-addr" name="address" placeholder="e.g. Kitsilano, Vancouver" data-tp="p_addr">
+        <label for="f-msg" data-t="f_msg">Describe the problem</label>
+        <textarea id="f-msg" name="message" placeholder="What's going on? Any details help." data-tp="p_msg"></textarea>
+        <label class="chk"><input type="checkbox" id="f-urgent" name="urgent"> <span data-t="urgent">This is urgent</span></label>
+        <button type="submit" class="submit" data-t="send">Send Request</button>
       </form>
     </div>
     <div id="donewrap" class="done" hidden>
       <div class="ok"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#d7141f" stroke-width="2.6" stroke-linecap="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
-      <h3>Thanks, <span id="d-name"></span>!</h3>
-      <p id="d-sent">Your request has been sent. We'll get back to you shortly.<br>Reference: <span class="ref" id="d-ref"></span></p>
-      <p id="d-fb" hidden>We couldn't send it automatically, so your email app has been opened with your request filled in &mdash; just press <b>Send</b>.<br>Email app didn't open? <a id="d-mail" href="#" style="color:#d7141f;font-weight:700">Tap here</a> or email <b>eoals0809@gmail.com</b></p>
-      <p>To book or confirm, call <a href="tel:+16728331298" data-call style="color:#d7141f;font-weight:700" class="phone-txt">(672) 833-1298</a></p>
-      <button class="submit" id="dclose">Done</button>
+      <h3><span data-t="thanks">Thanks,</span> <span id="d-name"></span><span data-t="thanks2">!</span></h3>
+      <p id="d-sent"><span data-t="sent">Your request has been sent. We'll get back to you shortly.</span><br><span data-t="ref">Reference</span>: <span class="ref" id="d-ref"></span></p>
+      <p id="d-fb" hidden><span data-t="fb1">We couldn't send it automatically, so your email app has been opened with your request filled in &mdash; just press <b>Send</b>.</span><br><span data-t="fb2">Email app didn't open?</span> <a id="d-mail" href="#" style="color:#d7141f;font-weight:700" data-t="tap_here">Tap here</a> <span data-t="or_email">or email</span> <b>eoals0809@gmail.com</b></p>
+      <p><span data-t="to_book">To book or confirm, call</span> <a href="tel:+16728331298" data-call style="color:#d7141f;font-weight:700" class="phone-txt">(672) 833-1298</a></p>
+      <button class="submit" id="dclose" data-t="done">Done</button>
     </div>
   </div>
 </div>
@@ -325,6 +332,64 @@ textarea{min-height:96px;resize:vertical}
   const PHONE = "(672) 833-1298";
   const EMAIL = "eoals0809@gmail.com";
   const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+  const I = {
+    nav_services:["Services","서비스"], nav_area:["Service Area","서비스 지역"], nav_contact:["Contact","연락처"],
+    get_quote:["GET A QUOTE","무료 견적"], req_quote:["Request a Quote","견적 요청"],
+    eyebrow:["Vancouver Plumbing Services","밴쿠버 배관 서비스"],
+    hero_p:["Reliable plumbing solutions for your home and business in Vancouver.","밴쿠버 가정과 사업장을 위한 믿을 수 있는 배관 서비스."],
+    call_now:["CALL NOW","지금 전화하기"], tap_call:["Tap to call","눌러서 전화"],
+    req_quote_up:["REQUEST A QUOTE","견적 요청하기"], free_est:["Get a free estimate","무료로 견적 받기"],
+    our_services:["Our Services","서비스 안내"], ess_services:["Essential Plumbing Services","주요 배관 서비스"],
+    s1:["Repairs","수리"], s1d:["Leaks, clogs, and plumbing issues","누수, 막힘 등 배관 문제"],
+    s2:["Drain &amp; Sewer","배수구 &amp; 하수관"], s2d:["Drain cleaning and maintenance","배수구 청소 및 관리"],
+    s3:["Fixture Installation","설비 설치"], s3d:["Faucets, sinks, toilets, and more","수전, 싱크대, 변기 등"],
+    proudly:["Proudly Serving","서비스 지역"], vancouver:["VANCOUVER","밴쿠버"], surrounding:["AND SURROUNDING AREAS","및 인근 지역"],
+    local:["Local Plumber<br>in Vancouver","밴쿠버<br>지역 배관 전문"],
+    town0:["Vancouver","밴쿠버"], town1:["Burnaby","버나비"], town2:["Richmond","리치먼드"], town3:["North Vancouver","노스밴쿠버"],
+    town4:["West Vancouver","웨스트밴쿠버"], town5:["New Westminster","뉴웨스트민스터"], town6:["Coquitlam","코퀴틀람"], town7:["Surrey","써리"],
+    foot_p:["Reliable plumbing solutions for your home and business in Vancouver, BC.","밴쿠버(BC) 가정과 사업장을 위한 믿을 수 있는 배관 서비스."],
+    phone_l:["Phone","전화"], email_l:["Email","이메일"], free_quote_arrow:["Request a free quote →","무료 견적 요청 →"],
+    hours:["Hours","영업시간"],
+    hours_d:["Mon–Fri: 7:00am – 7:00pm<br>Sat: 8:00am – 4:00pm<br>Sun: Emergency calls only","월–금: 오전 7시 – 오후 7시<br>토: 오전 8시 – 오후 4시<br>일: 긴급 출동만 가능"],
+    rights:["All rights reserved.","모든 권리 보유."],
+    call_now_s:["Call Now","전화하기"], free_quote:["Free Quote","무료 견적"],
+    m_title:["Request a Free Quote","무료 견적 요청"],
+    m_lead:["Tell us about the job and we'll get back to you with an estimate.","작업 내용을 알려주시면 견적을 보내드릴게요."],
+    f_name:["Full name *","이름 *"], e_name:["Please enter your name.","이름을 입력해 주세요."],
+    f_phone:["Phone *","전화번호 *"], e_phone:["Enter a valid phone number.","올바른 전화번호를 입력해 주세요."],
+    e_email:["Enter a valid email.","올바른 이메일을 입력해 주세요."],
+    f_svc:["Service needed *","필요한 서비스 *"], o0:["Select a service…","서비스를 선택하세요…"],
+    o1:["Repairs – leaks, clogs, issues","수리 – 누수, 막힘 등"], o4:["Other","기타"],
+    e_svc:["Please choose a service.","서비스를 선택해 주세요."],
+    f_addr:["Address / Area","주소 / 지역"], f_msg:["Describe the problem","문제 설명"],
+    urgent:["This is urgent","급해요"], send:["Send Request","요청 보내기"], sending:["Sending…","보내는 중…"],
+    thanks:["Thanks,","감사합니다,"], thanks2:["!","님!"],
+    sent:["Your request has been sent. We'll get back to you shortly.","요청이 접수되었습니다. 곧 연락드릴게요."],
+    ref:["Reference","접수번호"],
+    fb1:["We couldn't send it automatically, so your email app has been opened with your request filled in &mdash; just press <b>Send</b>.","자동 전송에 실패해서 내용이 채워진 메일 앱을 열었어요. <b>보내기</b>만 눌러주세요."],
+    fb2:["Email app didn't open?","메일 앱이 안 열렸나요?"], tap_here:["Tap here","여기를 누르거나"], or_email:["or email","이메일:"],
+    to_book:["To book or confirm, call","예약·확인 전화:"], done:["Done","닫기"],
+    calling:["Calling Damon Plumbing: ","데이먼 플러밍에 전화 연결: "],
+    p_phone:["e.g. 604-123-4567","예: 604-123-4567"], p_addr:["e.g. Kitsilano, Vancouver","예: 키칠라노, 밴쿠버"],
+    p_msg:["What's going on? Any details help.","어떤 문제인지 자세히 적어주세요."],
+    title:["Damon Plumbing – Vancouver Plumbing Services","데이먼 플러밍 – 밴쿠버 배관 서비스"],
+    get_for:["Get a quote for this →","이 서비스 견적 받기 →"],
+    d_repairs:["Plumbing Repairs","배관 수리"], d_drain:["Drain &amp; Sewer","배수구 &amp; 하수관"], d_fixture:["Fixture Installation","설비 설치"],
+    l_repairs:[["Leaking pipes & faucets","Clogged sinks, tubs & toilets","Low water pressure","Burst or frozen pipes","Running toilets & valve replacement"],["배관·수전 누수","싱크대·욕조·변기 막힘","낮은 수압","파열·동파 배관","변기 물샘 및 밸브 교체"]],
+    l_drain:[["Professional drain cleaning","Camera inspections","Hydro-jetting","Sewer line repair","Preventive maintenance plans"],["전문 배수구 청소","내시경 카메라 점검","고압 세척","하수관 수리","정기 예방 관리"]],
+    l_fixture:[["Kitchen & bathroom faucets","Sinks & garbage disposals","Toilets & showers","Water heaters","Dishwasher & appliance hookups"],["주방·욕실 수전","싱크대·음식물 분쇄기","변기·샤워기","온수기","식기세척기·가전 연결"]]
+  };
+  let LANG = "en";
+  const T = k => I[k][LANG==="ko"?1:0];
+  function applyLang(){
+    document.documentElement.lang = LANG;
+    $$("[data-t]").forEach(el => el.innerHTML = T(el.dataset.t));
+    $$("[data-tp]").forEach(el => el.placeholder = T(el.dataset.tp));
+    document.title = T("title");
+    $("#langBtn").textContent = LANG==="ko" ? "EN" : "한글";
+    $("#langBtn").setAttribute("aria-label", LANG==="ko" ? "Switch to English" : "한국어로 보기");
+    if(typeof renderDetail==="function") renderDetail();
+  }
   $("#yr").textContent = new Date().getFullYear();
 
   // Menu
@@ -339,26 +404,27 @@ textarea{min-height:96px;resize:vertical}
 
   // Call links: try tel:, also show number (tel: may be blocked in some viewers)
   $$("[data-call]").forEach(a => a.addEventListener("click", () => {
-    toast("Calling Damon Plumbing: " + PHONE);
+    toast(T("calling") + PHONE);
     try{ navigator.clipboard && navigator.clipboard.writeText(PHONE).catch(()=>{}); }catch(e){}
   }));
 
   // Services detail
-  const SVC = {
-    repairs:{t:"Plumbing Repairs",l:["Leaking pipes & faucets","Clogged sinks, tubs & toilets","Low water pressure","Burst or frozen pipes","Running toilets & valve replacement"]},
-    drain:{t:"Drain & Sewer",l:["Professional drain cleaning","Camera inspections","Hydro-jetting","Sewer line repair","Preventive maintenance plans"]},
-    fixture:{t:"Fixture Installation",l:["Kitchen & bathroom faucets","Sinks & garbage disposals","Toilets & showers","Water heaters","Dishwasher & appliance hookups"]}
-  };
   let current = null;
-  $$(".svc").forEach(b => b.addEventListener("click", () => {
-    const k = b.dataset.svc, d = $("#detail");
-    $$(".svc").forEach(x => x.classList.remove("active"));
-    if(current === k){ current=null; d.classList.remove("show"); return; }
-    current = k; b.classList.add("active");
-    d.innerHTML = `<h4>${SVC[k].t}</h4><ul>${SVC[k].l.map(i=>`<li>${i}</li>`).join("")}</ul>
-      <button class="btn-q" data-quote data-pre="${k}">Get a quote for this →</button>`;
+  function renderDetail(){
+    const d = $("#detail");
+    if(!current){ d.classList.remove("show"); return; }
+    const k = current;
+    d.innerHTML = `<h4>${T("d_"+k)}</h4><ul>${T("l_"+k).map(i=>`<li>${i}</li>`).join("")}</ul>
+      <button class="btn-q" data-quote data-pre="${k}">${T("get_for")}</button>`;
     d.classList.add("show");
     d.querySelector("[data-quote]").addEventListener("click", openQuote);
+  }
+  $$(".svc").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.svc;
+    $$(".svc").forEach(x => x.classList.remove("active"));
+    current = current===k ? null : k;
+    if(current) b.classList.add("active");
+    renderDetail();
   }));
 
   // Quote modal
@@ -407,12 +473,13 @@ textarea{min-height:96px;resize:vertical}
       "Service": SV[s.value],
       "Address / Area": $("#f-addr").value.trim() || "-",
       "Urgent": urgent ? "YES" : "No",
-      "Details": $("#f-msg").value.trim() || "-"
+      "Details": $("#f-msg").value.trim() || "-",
+      "Language": LANG==="ko" ? "한국어" : "English"
     };
     const subj = (urgent?"[URGENT] ":"")+"Quote Request - "+SV[s.value]+" - "+data.Name;
 
     const btn = form.querySelector(".submit");
-    btn.disabled = true; btn.textContent = "Sending…";
+    btn.disabled = true; btn.textContent = T("sending");
     let sent = false;
     try{
       const ctrl = new AbortController(); const to = setTimeout(()=>ctrl.abort(), 15000);
@@ -428,7 +495,7 @@ textarea{min-height:96px;resize:vertical}
       const j = await res.json().catch(()=>({}));
       sent = res.ok && String(j.success) === "true";
     }catch(err){ sent = false; }
-    btn.disabled = false; btn.textContent = "Send Request";
+    btn.disabled = false; btn.textContent = T("send");
 
     if(!sent){
       const body = Object.entries(data).map(([k,v]) => k+": "+v).join("\n");
@@ -444,6 +511,12 @@ textarea{min-height:96px;resize:vertical}
     form.reset(); $$(".err").forEach(x=>mark(x,false));
   });
   form.addEventListener("input", e => { if(e.target.classList.contains("err")) mark(e.target,false); });
+
+  $("#langBtn").addEventListener("click", () => {
+    LANG = LANG==="ko" ? "en" : "ko";
+    applyLang();
+  });
+  applyLang();
 })();
 </script>
 </body>
